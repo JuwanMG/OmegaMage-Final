@@ -21,7 +21,8 @@ public enum ElementType
     fire,
     aether,
     none
-}
+}
+
 // MouseInfo stores information about the mouse in each frame of interaction
 [System.Serializable]
 public class MouseInfo
@@ -43,7 +44,8 @@ public class MouseInfo
         hit = Physics.Raycast(ray, out hitInfo, mask);
         return (hitInfo);
     }
-}
+}
+
 
 public class Mage : PT_MonoBehaviour
 {
@@ -63,7 +65,9 @@ public class Mage : PT_MonoBehaviour
     public float lineMinDelta = 0.1f; //**
     public float lineMaxDelta = 0.5f; //**
     public float lineMaxLength = 8f; //**
-    public GameObject fireGroundSpellPrefab; //**
+    public GameObject fireGroundSpellPrefab;
+    public GameObject waterGroundSpellPrefab;
+    public GameObject airGroundSpellPrefab;
     public float health = 4; // Total mage health //**
 
     public float damageTime = -100; //**
@@ -81,18 +85,22 @@ public class Mage : PT_MonoBehaviour
     private Vector3 knockbackDir; // Direction of knockback //**
     private Transform viewCharacterTrans; //**
 
-    protected Transform spellAnchor; // The parent transform for all spells //**
-    public float totalLineLength; //**
+    protected Transform spellAnchor; // The parent transform for all spells //**
+    
+    public float totalLineLength; //**
+
     public List<Vector3> linePts; // Points to be shown in the line //**
     protected LineRenderer liner; // Ref to the LineRenderer Component //**
     protected float lineZ = -0.1f; // Z depth of the line //**
     public MPhase mPhase = MPhase.idle;
     public List<MouseInfo> mouseInfos = new List<MouseInfo>();
-    public string actionStartTag; // ["Mage", "Ground", "Enemy"]
+    public string actionStartTag; // ["Mage", "Ground", "Enemy"]
+
     public bool walking = false; //**
     public Vector3 walkTarget; //**
     public Transform characterTrans; //**
     public List<Element> selectedElements = new List<Element>(); //**
+    
     void Awake()
     {
         S = this; // Set the Mage Singleton
@@ -236,7 +244,8 @@ public class Mage : PT_MonoBehaviour
             actionStartTag = taggedParent.tag;
             // ^ this should be either "Ground", "Mage", or "Enemy"
         }
-    }    void MouseTap()
+    }
+    void MouseTap()
     {
         // Something was tapped like a button
         if (DEBUG) print("Mage.MouseTap()");
@@ -291,7 +300,8 @@ public class Mage : PT_MonoBehaviour
 
                                // Clear the liner //**
             ClearLiner(); //**
-        }
+        }
+
     }
 
     void CastGroundSpell()
@@ -310,6 +320,26 @@ public class Mage : PT_MonoBehaviour
                     fireGO = Instantiate(fireGroundSpellPrefab) as GameObject;
                     fireGO.transform.parent = spellAnchor;
                     fireGO.transform.position = pt;
+                }
+                break;
+            case ElementType.water:
+                GameObject waterGO;
+                foreach (Vector3 pt in linePts)
+                { // For each Vector3 in linePts...
+                  // ...create an instance of waterGroundSpellPrefab
+                    waterGO = Instantiate(waterGroundSpellPrefab) as GameObject;
+                    waterGO.transform.parent = spellAnchor;
+                    waterGO.transform.position = pt;
+                }
+                break;
+            case ElementType.air:
+                GameObject airGO;
+                foreach (Vector3 pt in linePts)
+                { // For each Vector3 in linePts...
+                  // ...create an instance of airGroundSpellPrefab
+                    airGO = Instantiate(airGroundSpellPrefab) as GameObject;
+                    airGO.transform.parent = spellAnchor;
+                    airGO.transform.position = pt;
                 }
                 break;
                 //TODO: Add other elements types later
@@ -334,7 +364,8 @@ public class Mage : PT_MonoBehaviour
         float rZ = Mathf.Rad2Deg * Mathf.Atan2(delta.y, delta.x);
         // Set the rotation of characterTrans (doesn't actually rotate _Mage)
         characterTrans.rotation = Quaternion.Euler(0, 0, rZ);
-    }
+    }
+
     public void StopWalking()
     { // Stops the _Mage from walking
         walking = false;
@@ -445,12 +476,14 @@ public class Mage : PT_MonoBehaviour
         knockbackDir = (pos - enemy.pos).normalized;
         invincibleBool = true;
     }
+
     // The Mage dies
     void Die()
     {
         Application.LoadLevel(0); // Reload the level
                                   // ^ Eventually, you'll want to do something more elegant
-    }
+    }
+
 
     // Show where the player tapped
     public void ShowTap(Vector3 loc)
@@ -563,7 +596,8 @@ public class Mage : PT_MonoBehaviour
         }
         linePts.Add(pt); // Add the point
         UpdateLiner(); // And finally update the line
-    }
+    }
+
     // Update the LineRenderer with the new points
     public void UpdateLiner()
     {
@@ -589,5 +623,6 @@ public class Mage : PT_MonoBehaviour
     public void ClearInput()
     {
         mPhase = MPhase.idle;
-    }
+    }
+
 }

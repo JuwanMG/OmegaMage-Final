@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 // Extends PT_MonoBehaviour
-public class FireGroundSpell : PT_MonoBehaviour
+public class AirGroundSpell : PT_MonoBehaviour
 {
-    public float duration = 4; // Lifetime of this GameObject
+    public float duration = 3; // Lifetime of this GameObject
     public float durationVariance = 0.5f;
     // ^ This allows the duration to range from 3.5 to 4.5
     public float fadeTime = 1f; // Length of time to fade
     public float timeStart; // Birth time of this GameObject
                             // Use this for initialization
-    public float damagePerSecond = 10;
+    public float damagePerSecond = 0;
     void Start()
     {
         timeStart = Time.time;
@@ -47,7 +47,7 @@ public class FireGroundSpell : PT_MonoBehaviour
         {
             go = other.gameObject;
         }
-        Utils.tr("Flame hit", go.name);
+        Utils.tr("Air hit", go.name);
     }
     void OnTriggerStay(Collider other)
     {
@@ -57,7 +57,7 @@ public class FireGroundSpell : PT_MonoBehaviour
         // If there is an EnemyBug component, dmage it with fire
         if (recipient != null)
         {
-            recipient.Damage(damagePerSecond, ElementType.fire, true);
+            recipient.Damage(damagePerSecond, ElementType.air, true);
 
         }
     }
