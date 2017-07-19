@@ -68,6 +68,7 @@ public class Mage : PT_MonoBehaviour
     public GameObject fireGroundSpellPrefab;
     public GameObject waterGroundSpellPrefab;
     public GameObject airGroundSpellPrefab;
+    public GameObject earthGroundSpellPrefab;
     public float health = 4; // Total mage health //**
 
     public float damageTime = -100; //**
@@ -340,6 +341,16 @@ public class Mage : PT_MonoBehaviour
                     airGO = Instantiate(airGroundSpellPrefab) as GameObject;
                     airGO.transform.parent = spellAnchor;
                     airGO.transform.position = pt;
+                }
+                break;
+            case ElementType.earth:
+                GameObject earthGO;
+                foreach (Vector3 pt in linePts)
+                { // For each Vector3 in linePts...
+                  // ...create an instance of airGroundSpellPrefab
+                    earthGO = Instantiate(earthGroundSpellPrefab) as GameObject;
+                    earthGO.transform.parent = spellAnchor;
+                    earthGO.transform.position = pt;
                 }
                 break;
                 //TODO: Add other elements types later
