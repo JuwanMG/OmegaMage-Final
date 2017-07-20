@@ -3,6 +3,7 @@ using System.Collections;
 public class ElementInventoryButton : MonoBehaviour
 {
     public ElementType type;
+    
     void Awake()
     {
         // Parse the first character of the name of this GameObject into an int
@@ -14,7 +15,10 @@ public class ElementInventoryButton : MonoBehaviour
     }
     void OnMouseUpAsButton()
     {
+       
         // Tell the Mage to add this element type
         Mage.S.SelectElement(type);
     }
+
+    
 }
